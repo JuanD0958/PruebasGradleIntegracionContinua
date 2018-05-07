@@ -3,6 +3,7 @@ package co.ceiba.service;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
+import org.mockito.Mockito;
 
 import co.ceiba.domain.Person;
 import co.ceiba.testdatabuilder.PersonTestDataBuilder;
@@ -14,17 +15,22 @@ public class NotifyPersonServiceTest {
 	
 	@Before
 	public void setup() {
-		emailService = new EmailService();
+		//emailService = new EmailService();
+		emailService = Mockito.mock(EmailService.class);
 		notifyPersonService = new NotifyPersonService(emailService);
 	}
 
 	@Test
 	public void notifyTest() {
 		//Arrange
-		Person person = new PersonTestDataBuilder().build();
+		Person person = new PersonTestDataBuilder().withName("Juan").build();		
+		Mockito.when(emailService.sendMail(Mockito.anyString())).thenReturn("Hola mundo");
 		//Act
 		String message = notifyPersonService.notify(person);
 		//Assert
+		
+
+		System.out.print(message);
 		Assert.assertNotNull(message);
 	}
 }
